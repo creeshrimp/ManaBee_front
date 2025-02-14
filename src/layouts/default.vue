@@ -1,11 +1,16 @@
 <template>
     <v-app>
-        <v-app-bar color="primary" :height="60" :rounded="0" :image="false" :tile="false" density="default"
-            scroll-behavior="hide">
+        <v-app-bar
+            color="primary"
+            :height="60"
+            :rounded="0"
+            :image="false"
+            :tile="false"
+            density="default"
+            scroll-behavior="hide"
+        >
             <v-app-bar-nav-icon variant="text" />
-            <v-toolbar-title>
-                Vuetify Layout Designer
-            </v-toolbar-title>
+            <v-toolbar-title> 聊天室 </v-toolbar-title>
             <v-spacer />
             <template v-if="$vuetify.display.mdAndUp">
                 <v-btn icon="mdi-magnify" variant="text" />
@@ -24,8 +29,12 @@
 
         <v-navigation-drawer location="end">
             <template #prepend>
-                <v-list-item lines="two" prepend-avatar="https://randomuser.me/api/portraits/women/81.jpg"
-                    subtitle="Logged in" title="Jane Smith" />
+                <v-list-item
+                    lines="two"
+                    prepend-avatar="https://randomuser.me/api/portraits/women/81.jpg"
+                    subtitle="Logged in"
+                    title="Jane Smith"
+                />
             </template>
 
             <v-divider />
@@ -40,10 +49,6 @@
         <v-main>
             <router-view></router-view>
         </v-main>
-
-        <v-footer color="deep-purple-lighten-5" :app="true">
-            Made with 💜 Ameer Hamza
-        </v-footer>
     </v-app>
 </template>
 
