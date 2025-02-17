@@ -1,24 +1,24 @@
 <template>
     <v-app>
+        <!-- 導覽列 -->
         <v-app-bar color="primary" :height="60" :rounded="0" :tile="false" density="default" scroll-behavior="hide">
-            <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" />
-            <!-- prepend-icon BEE -->
-
+            <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" variant="text" @click.stop="drawer = !drawer" />
             <v-toolbar-title>
                 <v-icon>mdi-bee</v-icon>
                 <span>MANABEE</span>
             </v-toolbar-title>
-            <!-- 聊天室連結 -->
-            <v-btn prepend-icon="mdi-message-text" variant="text" to="/chatroom/chat">聊天室</v-btn>
-            <v-spacer />
+
             <template v-if="$vuetify.display.mdAndUp">
-                <v-btn icon="mdi-magnify" variant="text" />
-                <v-btn icon="mdi-filter" variant="text" />
+                <v-btn prepend-icon="mdi-message-text" variant="text" to="/chatroom/chat">聊天室</v-btn>
+                <v-spacer />
+                <v-btn variant="flat" color="success">登入</v-btn>
+                <v-btn variant="outlined" color="white" class="ml-2">註冊</v-btn>
             </template>
             <v-btn icon="mdi-dots-vertical" variant="text" />
         </v-app-bar>
 
-        <v-navigation-drawer v-model="drawer" location="start">
+        <!-- 手機側邊攔 -->
+        <v-navigation-drawer v-model="drawer" location="start" mobile temporary>
             <template #prepend>
                 <v-list-item
                     lines="two"
@@ -31,7 +31,7 @@
             <v-divider />
 
             <v-list density="compact" nav>
-                <v-list-item prepend-icon="mdi-home-city" title="Home" value="home" />
+                <v-list-item prepend-icon="mdi-home-city" title="首頁" to="/" />
                 <v-list-item prepend-icon="mdi-message-text" title="聊天室" to="/chatroom/chat" />
             </v-list>
         </v-navigation-drawer>
@@ -47,5 +47,5 @@
 <script setup>
 import { ref } from 'vue'
 // 側邊欄1
-const drawer = ref(null)
+const drawer = ref(false)
 </script>

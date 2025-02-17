@@ -1,16 +1,18 @@
 <template>
     <!-- search bar -->
-    <v-toolbar dense floating class="pa-1">
-        <v-text-field
-            :loading="loading"
-            append-inner-icon="mdi-magnify"
-            label="尋找志同道合的夥伴"
-            variant="outlined"
-            hide-details
-            single-line
-            @click:append-inner="search"
-        ></v-text-field>
-    </v-toolbar>
+    <v-container>
+        <v-toolbar dense floating class="pa-1">
+            <v-text-field
+                :loading="loading"
+                append-inner-icon="mdi-magnify"
+                label="尋找志同道合的夥伴"
+                variant="outlined"
+                hide-details
+                single-line
+                @click:append-inner="search"
+            ></v-text-field>
+        </v-toolbar>
+    </v-container>
     <v-container>
         <v-row>
             <v-col v-for="n in 6" :key="n" cols="12" sm="6" md="4">

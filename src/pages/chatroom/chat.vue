@@ -57,7 +57,7 @@
     </v-container>
 
     <!-- 右邊側邊攔資訊 -->
-    <v-navigation-drawer location="end" class="pa-0">
+    <v-navigation-drawer location="end">
         <!-- <template #prepend>
                 <v-list-item
                     lines="two"
@@ -68,8 +68,9 @@
             </template> -->
 
         <v-divider />
-
-        <v-btn block color="success" flat>提出交換申請</v-btn>
+        <template #append>
+            <v-btn block color="success" flat size="large">開始交換</v-btn>
+        </template>
         <v-list density="compact" nav>
             <!-- <v-list-item prepend-icon="mdi-home-city" title="Home" value="home" /> -->
         </v-list>
