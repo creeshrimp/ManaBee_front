@@ -1,14 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar
-            color="primary"
-            :height="60"
-            :rounded="0"
-            :image="false"
-            :tile="false"
-            density="default"
-            scroll-behavior="hide"
-        >
+        <v-app-bar color="primary" :height="60" :rounded="0" :tile="false" density="default" scroll-behavior="hide">
             <v-app-bar-nav-icon variant="text" />
             <v-toolbar-title> 聊天室 </v-toolbar-title>
             <v-spacer />
