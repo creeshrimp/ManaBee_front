@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-app-bar color="primary" :height="60" :rounded="0" :tile="false" density="default" scroll-behavior="hide">
-            <v-app-bar-nav-icon variant="text" />
+            <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" />
             <v-toolbar-title> Vuetify Layout Designer </v-toolbar-title>
             <v-spacer />
             <template v-if="$vuetify.display.mdAndUp">
@@ -47,5 +47,7 @@
 </template>
 
 <script setup>
-//
+import { ref } from 'vue'
+// 側邊欄1
+const drawer = ref(null)
 </script>

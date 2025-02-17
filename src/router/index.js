@@ -5,13 +5,21 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import { createRouter, createWebHashHistory } from 'vue-router/auto'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { routes } from 'vue-router/auto-routes'
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     routes: setupLayouts(routes),
+})
+
+// afterEach
+router.afterEach((to) => {
+    // from https://github.com/intlify/vue-i18n/discussions/613
+    // 就這樣就可以了 by 宇翔
+    // console.log(to.meta.title)
+    document.title = to.meta.title + ' | MANABEE'
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
