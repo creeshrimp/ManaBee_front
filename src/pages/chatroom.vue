@@ -21,13 +21,14 @@
                     <v-list-item v-for="msg in messages" :key="msg.id" :prepend-avatar="msg.avatar">
                         <v-list-item-title class="mb-1 text-h6"> {{ msg.name }} </v-list-item-title>
                         <v-list-item-subtitle class="text-subtitle-1 text-high-emphasis opacity-100">
-                            {{ msg.text }}
+                            {{ msg.text }} - {{ msg.time }}
                         </v-list-item-subtitle>
                     </v-list-item>
                 </v-list>
             </v-col>
         </v-row>
         <v-text-field
+            v-model="inputMsg"
             bg-color="grey-lighten-1"
             class="overflow-hidden position-absolute bottom-0 w-100"
             density="default"
@@ -81,20 +82,27 @@ import { io } from 'socket.io-client'
 //     },
 // ])
 const messages = ref([])
+const inputMsg = ref('')
 let socket = null
 
 onMounted(() => {
-    socket = io('http://localhost:4000') // 只有進入聊天室時才連線
+    socket = io(import.meta.env.VITE_BACKEND_URL) // 只有進入聊天室時才連線
 
-    // socket.on('receiveMessage', (message) => {
-    //     messages.value.push(message)
-    // })
+    socket.on('receiveMessage', (message) => {
+        messages.value.push(message)
+    })
 })
 
 onUnmounted(() => {
     socket.disconnect() // 離開聊天室時關閉 WebSocket
 })
 function sendMessage() {
-    alert('send message')
+    if (inputMsg.value === '') return
+    socket.emit('sendMessage', {
+        name: socket.id,
+        text: inputMsg.value,
+        avatar: 'https://randomuser.me/api/portraits/women/81.jpg',
+    })
+    inputMsg.value = ''
 }
 </script>
