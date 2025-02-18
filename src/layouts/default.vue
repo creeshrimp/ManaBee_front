@@ -11,7 +11,7 @@
             <v-btn prepend-icon="mdi-message-text" variant="text" to="/chatroom/chat">聊天室</v-btn>
         </template>
         <v-spacer />
-        <v-btn variant="flat" color="success">登入</v-btn>
+        <v-btn variant="flat" color="success" to="/login">登入</v-btn>
         <v-btn variant="outlined" color="white" class="ml-2">註冊</v-btn>
         <v-btn icon="mdi-dots-vertical" variant="text" />
     </v-app-bar>
