@@ -16,22 +16,36 @@
     <v-container>
         <v-row>
             <v-col v-for="n in 6" :key="n" cols="12" sm="6" md="4">
-                <v-card color="secondary">
+                <v-card color="surface">
                     <v-card-title>
                         <v-avatar>
                             <v-img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" cover></v-img>
                         </v-avatar>
-                        <span class="ml-2">冬日暖陽</span>
+                        <span class="ml-2">Yu-chin</span>
                     </v-card-title>
+                    <v-spacer></v-spacer>
+                    <v-card-text>
+                        <h3 class="mr-1 opacity-80 mb-2">我想學</h3>
+
+                        <v-chip link class="mr-1" color="secondary" variant="tonal" size="small">#平面設計</v-chip>
+                        <v-chip link class="mr-1" color="secondary" variant="tonal" size="small">#料理</v-chip>
+                        <v-chip link class="mr-1" color="secondary" variant="tonal" size="small">#運動</v-chip>
+                    </v-card-text>
 
                     <v-card-text>
-                        <div>Whitehaven Beach</div>
+                        <h3 class="mr-1 opacity-80 mb-2">我能教</h3>
 
-                        <div>Whitsunday Island, Whitsunday Islands</div>
+                        <v-chip link class="mr-1" color="secondary" variant="tonal" size="small">#linux安裝</v-chip>
+                        <v-chip link class="mr-1" color="secondary" variant="tonal" size="small">#英語會話</v-chip>
+                    </v-card-text>
+
+                    <v-card-text>
+                        <h3 class="mr-1 opacity-80 mb-2">自我介紹</h3>
+                        <p class="text-truncate">大家好我是YU-CHIN，我很會各種冷門技能，歡迎找我學習交流</p>
                     </v-card-text>
 
                     <v-card-actions>
-                        <v-btn variant="outlined" color="white" block>聯絡冬日暖陽</v-btn>
+                        <v-btn variant="tonal" color="white" block>聯絡Yu-Chin</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
