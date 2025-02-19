@@ -1,6 +1,6 @@
 <template>
-    <v-container fluid class="h-100 pa-0 bg-blue-grey-lighten-4 position-relative">
-        <v-toolbar>
+    <v-container fluid class="d-flex flex-column h-screen pa-0 bg-blue-grey-lighten-4 position-relative">
+        <v-toolbar class="flex-0-0">
             <v-toolbar-title>
                 <v-btn icon>
                     <v-avatar>
@@ -13,37 +13,36 @@
             <v-btn icon="mdi-dots-vertical"></v-btn>
         </v-toolbar>
         <!-- 訊息內容 -->
-        <v-row>
-            <v-col v-if="messages.length > 0">
-                <v-list lines="two">
-                    <template v-for="msg in messages" :key="msg.id">
-                        <!-- 自己的發言 -->
-                        <v-list-item v-if="msg.name === socket.id" class="d-flex justify-end w-100">
-                            <!-- <v-list-item-title class="mb-1 text-h6 text-end"> 我 </v-list-item-title> -->
-                            <v-list-item-subtitle class="text-subtitle-1 text-high-emphasis opacity-100">
-                                <span class="opacity-50 text-subtitle-2 mr-4">{{ msg.time }}</span>
-                                <span class="opacity-50 text-subtitle-2 mr-4">-</span>
-                                <span>{{ msg.text }}</span>
-                            </v-list-item-subtitle>
-                        </v-list-item>
+        <div class="flex-1-1 overflow-y-auto">
+            <v-list v-if="messages.length > 0" lines="two">
+                <template v-for="msg in messages" :key="msg.id">
+                    <!-- 自己的發言 -->
+                    <v-list-item v-if="msg.name === socket.id" class="d-flex justify-end w-100">
+                        <!-- <v-list-item-title class="mb-1 text-h6 text-end"> 我 </v-list-item-title> -->
+                        <v-list-item-subtitle class="text-subtitle-1 text-high-emphasis opacity-100">
+                            <span class="opacity-50 text-subtitle-2 mr-4">{{ msg.time }}</span>
+                            <span class="opacity-50 text-subtitle-2 mr-4">-</span>
+                            <span>{{ msg.text }}</span>
+                        </v-list-item-subtitle>
+                    </v-list-item>
 
-                        <!-- 其他人的發言 -->
-                        <v-list-item v-else :prepend-avatar="msg.avatar">
-                            <v-list-item-title class="mb-1 text-h6"> {{ msg.name }} </v-list-item-title>
-                            <v-list-item-subtitle class="text-subtitle-1 text-high-emphasis opacity-100">
-                                <span>{{ msg.text }}</span>
-                                <span class="opacity-50 text-subtitle-2 ml-4">-</span>
-                                <span class="opacity-50 text-subtitle-2 ml-4">{{ msg.time }}</span>
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </template>
-                </v-list>
-            </v-col>
-        </v-row>
+                    <!-- 其他人的發言 -->
+                    <v-list-item v-else :prepend-avatar="msg.avatar">
+                        <v-list-item-title class="mb-1 text-h6"> {{ msg.name }} </v-list-item-title>
+                        <v-list-item-subtitle class="text-subtitle-1 text-high-emphasis opacity-100">
+                            <span>{{ msg.text }}</span>
+                            <span class="opacity-50 text-subtitle-2 ml-4">-</span>
+                            <span class="opacity-50 text-subtitle-2 ml-4">{{ msg.time }}</span>
+                        </v-list-item-subtitle>
+                    </v-list-item>
+                </template>
+            </v-list>
+        </div>
+
         <v-text-field
             v-model="inputMsg"
             bg-color="grey-lighten-1"
-            class="overflow-hidden position-absolute bottom-0 w-100"
+            class="flex-0-0 overflow-hidden"
             density="default"
             rounded="0"
             variant="solo-filled"
@@ -147,3 +146,5 @@ function sendMessage() {
     }
 }
 </route>
+
+<style></style>
