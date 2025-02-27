@@ -9,29 +9,34 @@ const apiAuth = axios.create({
     baseURL: import.meta.env.VITE_API,
 })
 
-/**
- *  axios 攔截器
- *  1. axios.get() / post()
- *  2. interceptors.request(請求設定 => {})
- *  3. 送出
- *  4. interceptors.response(成功處理, 失敗處理)
- *  5. .then().catch()
- */
+// ----------------------------------------------------------------
+// axios interceptors 攔截器，用來再請求/回應之前加上攔截器，用來做一些預處理
+// ----------------------------------------------------------------
 
+/**
+ * 把請求都帶上 jwt token
+ */
 apiAuth.interceptors.request.use((config) => {
     const user = useUserStore()
     config.headers.Authorization = 'Bearer ' + user.token
     return config
 })
 
+/**
+ *
+ * 處理 token 舊換新
+ *
+ * @response攔截器用法 .use([success_callback], [error_callback])
+ *
+ * @param {Function} success_callback 成功時(2xx) 要做的事 (res)
+ * @param {Function} error_callback error時(非2xx) 要做的事 (error)
+ */
 apiAuth.interceptors.response.use(
     (res) => res,
     async (error) => {
-        // 判斷失敗有沒有收到回應
-        // 沒收到回應可能是網路問題
-        // 有收到才需要處理
+        // 失敗=>且有收到回應=>處理是否舊換新
         if (error.response) {
-            // 是登入過期，且請求不是舊換新
+            // 是登入過期，且請求不是舊換新 => 幫他舊換新
             if (error.response.data.message === 'userTokenExpired' && error.config.url !== '/user/refresh') {
                 const user = useUserStore()
                 try {
