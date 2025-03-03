@@ -2,12 +2,13 @@
     <!-- 導覽列 -->
     <v-app-bar color="primary" :height="60" :rounded="0" :tile="false" density="default" scroll-behavior="hide">
         <template #prepend>
-            <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" variant="text" @click.stop="drawer = !drawer" />
-            <v-app-bar-title>
-                <v-icon>mdi-bee</v-icon>
+            <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" class="mr-n4" variant="text" @click.stop="drawer = !drawer" />
+            <v-btn variant="plain" class="text-h6" to="/">
+                <v-icon class="mr-1">mdi-bee</v-icon>
                 <span>MANABEE</span>
-            </v-app-bar-title>
+            </v-btn>
         </template>
+
         <v-spacer />
         <template v-if="$vuetify.display.mdAndUp">
             <v-btn prepend-icon="mdi-message-text" variant="plain" to="/chatroom" rounded="0" class="h-100">聊天室</v-btn>
@@ -44,7 +45,7 @@
     </v-main>
 
     <!-- fab -->
-    <v-fab
+    <!-- <v-fab
         :absolute="false"
         :app="true"
         color="primary"
@@ -52,10 +53,9 @@
         size="large"
         icon="mdi-message-text"
         variant="flat"
-        to="/chatroom"
-    ></v-fab>
+    ></v-fab> -->
 
-    <v-footer color="deep-purple-lighten-5" :app="true"> footer </v-footer>
+    <v-footer color="secondary" :app="true" class="d-flex justify-center"> Copyright © 2025 MANABEE </v-footer>
 </template>
 
 <script setup>

@@ -12,101 +12,142 @@
             @fetch-messages="fetchMessages($event.detail[0])"
         />
     </div>
+    <!-- fab -->
+    <v-fab
+        v-if="!detailDrawer"
+        :absolute="false"
+        :app="true"
+        color="primary"
+        :location="'right top'"
+        size="large"
+        icon="mdi-calendar-plus"
+        variant="flat"
+        @click="detailDrawer = true"
+    ></v-fab>
+
+    <!-- 右邊側邊攔資訊 -->
+    <v-navigation-drawer v-model="detailDrawer" location="end">
+        <template #prepend>
+            <v-toolbar color="gray">
+                <v-btn icon="mdi-arrow-right" variant="text" @click="detailDrawer = false"></v-btn>
+                <span class="text-h5">細節設定</span>
+            </v-toolbar>
+        </template>
+
+        <!-- 表單:詳細資訊設定 -->
+        <!-- <v-form :disabled="isSubmitting" @submit.prevent="submit"> -->
+        <v-card>
+            <v-card-title> </v-card-title>
+            <v-card-text>
+                <v-form>
+                    <v-text-field variant="solo" label="交換結束日期" />
+                    <v-text-field variant="solo" label="交換地點" />
+                </v-form>
+            </v-card-text>
+        </v-card>
+
+        <v-divider />
+        <template #append>
+            <v-btn block color="success" flat size="large">開始交換</v-btn>
+        </template>
+        <v-list density="compact" nav>
+            <!-- <v-list-item prepend-icon="mdi-home-city" title="Home" value="home" /> -->
+        </v-list>
+    </v-navigation-drawer>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
 import { register } from 'vue-advanced-chat'
-// import { register } from '../../vue-advanced-chat/dist/vue-advanced-chat.es.js'
 register()
 
-export default {
-    data() {
-        return {
-            currentUserId: '1234',
-            rooms: [
-                {
-                    roomId: '1',
-                    roomName: 'Room 1',
-                    avatar: 'https://66.media.tumblr.com/avatar_c6a8eae4303e_512.pnj',
-                    users: [
-                        { _id: '1234', username: 'John Doe' },
-                        { _id: '4321', username: 'John Snow' },
-                    ],
-                },
-                {
-                    roomId: '2',
-                    roomName: 'Room 1',
-                    avatar: 'https://66.media.tumblr.com/avatar_c6a8eae4303e_512.pnj',
-                    users: [
-                        { _id: '1234', username: 'John Doe' },
-                        { _id: '4321', username: 'John Snow' },
-                    ],
-                },
-            ],
-            messages: [],
-            messagesLoaded: false,
+// 側邊欄
+const detailDrawer = ref(false)
+
+const currentUserId = ref('1234')
+const rooms = ref([
+    {
+        roomId: '1',
+        roomName: 'Room 1',
+        avatar: 'https://66.media.tumblr.com/avatar_c6a8eae4303e_512.pnj',
+        users: [
+            { _id: '1234', username: 'John Doe' },
+            { _id: '4321', username: 'John Snow' },
+        ],
+    },
+    {
+        roomId: '2',
+        roomName: 'Room 1',
+        avatar: 'https://66.media.tumblr.com/avatar_c6a8eae4303e_512.pnj',
+        users: [
+            { _id: '1234', username: 'John Doe' },
+            { _id: '4321', username: 'John Snow' },
+        ],
+    },
+])
+const messages = ref([])
+const messagesLoaded = ref(false)
+
+function fetchMessages(options = {}) {
+    setTimeout(() => {
+        if (options.reset) {
+            messages.value = addMessages(true)
+        } else {
+            messages.value = [...addMessages(), ...messages.value]
+            messagesLoaded.value = true
         }
-    },
-
-    methods: {
-        fetchMessages({ options = {} }) {
-            setTimeout(() => {
-                if (options.reset) {
-                    this.messages = this.addMessages(true)
-                } else {
-                    this.messages = [...this.addMessages(), ...this.messages]
-                    this.messagesLoaded = true
-                }
-                // this.addNewMessage()
-            })
-        },
-
-        addMessages(reset) {
-            const messages = []
-
-            for (let i = 0; i < 30; i++) {
-                messages.push({
-                    _id: reset ? i : this.messages.length + i,
-                    content: `${reset ? '' : 'paginated'} message ${i + 1}`,
-                    senderId: '4321',
-                    username: 'John Doe',
-                    date: '13 November',
-                    timestamp: '10:20',
-                })
-            }
-
-            return messages
-        },
-
-        sendMessage(message) {
-            this.messages = [
-                ...this.messages,
-                {
-                    _id: this.messages.length,
-                    content: message.content,
-                    senderId: this.currentUserId,
-                    timestamp: new Date().toString().substring(16, 21),
-                    date: new Date().toDateString(),
-                },
-            ]
-        },
-
-        addNewMessage() {
-            setTimeout(() => {
-                this.messages = [
-                    ...this.messages,
-                    {
-                        _id: this.messages.length,
-                        content: 'NEW MESSAGE',
-                        senderId: '1234',
-                        timestamp: new Date().toString().substring(16, 21),
-                        date: new Date().toDateString(),
-                    },
-                ]
-            }, 2000)
-        },
-    },
+        // addNewMessage()
+    })
 }
+
+function addMessages(reset) {
+    const newMessages = []
+
+    for (let i = 0; i < 30; i++) {
+        newMessages.push({
+            _id: reset ? i : messages.value.length + i,
+            content: `${reset ? '' : 'paginated'} message ${i + 1}`,
+            senderId: '4321',
+            username: 'John Doe',
+            date: '13 November',
+            timestamp: '10:20',
+        })
+    }
+
+    return newMessages
+}
+
+function sendMessage(message) {
+    messages.value = [
+        ...messages.value,
+        {
+            _id: messages.value.length,
+            content: message.content,
+            senderId: currentUserId.value,
+            timestamp: new Date().toString().substring(16, 21),
+            date: new Date().toDateString(),
+        },
+    ]
+}
+
+function addNewMessage() {
+    setTimeout(() => {
+        messages.value = [
+            ...messages.value,
+            {
+                _id: messages.value.length,
+                content: 'NEW MESSAGE',
+                senderId: '1234',
+                timestamp: new Date().toString().substring(16, 21),
+                date: new Date().toDateString(),
+            },
+        ]
+    }, 2000)
+}
+
+onMounted(() => {
+    // Initial setup or fetching data if needed
+})
 </script>
 
 <style lang="scss">
