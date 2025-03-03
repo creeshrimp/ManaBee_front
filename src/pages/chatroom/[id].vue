@@ -1,92 +1,116 @@
 <template>
-    <v-container fluid class="d-flex flex-column h-screen pa-0 bg-blue-grey-lighten-4 position-relative">
-        <v-toolbar class="flex-0-0">
-            <v-toolbar-title>
-                <v-btn icon>
-                    <v-avatar>
-                        <v-img alt="John" src="https://cdn.vuetifyjs.com/images/john.jpg"></v-img>
-                    </v-avatar>
-                </v-btn>
-                聊天室{{ chatroomId }}
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon="mdi-dots-vertical"></v-btn>
-        </v-toolbar>
-
-        <VueAdvancedChat
-            height="100%"
-            :messages="messages"
-            :rooms="rooms"
-            :current-user-id="user.username"
-            @send-message="sendMessage"
+    <div>
+        <vue-advanced-chat
+            height="calc(100vh - 20px)"
+            :current-user-id="currentUserId"
+            :rooms="JSON.stringify(rooms)"
+            :rooms-loaded="true"
+            :messages="JSON.stringify(messages)"
+            :messages-loaded="messagesLoaded"
+            dark-mode
+            @send-message="sendMessage($event.detail[0])"
+            @fetch-messages="fetchMessages($event.detail[0])"
         />
-    </v-container>
-
-    <v-navigation-drawer location="end">
-        <v-divider />
-        <template #append>
-            <v-btn block color="success" flat size="large">開始交換</v-btn>
-        </template>
-        <v-list density="compact" nav></v-list>
-    </v-navigation-drawer>
+    </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { io } from 'socket.io-client'
-import { useUserStore } from '@/stores/user'
-import { useRoute } from 'vue-router'
-import VueAdvancedChat from 'vue-advanced-chat'
-import 'vue-advanced-chat/dist/vue-advanced-chat.css'
+<script>
+import { register } from 'vue-advanced-chat'
+// import { register } from '../../vue-advanced-chat/dist/vue-advanced-chat.es.js'
+register()
 
-const user = useUserStore()
-const route = useRoute()
-const chatroomId = ref(route.params.id)
-const messages = ref([])
-const rooms = ref([{ roomId: chatroomId.value, roomName: `聊天室 ${chatroomId.value}` }])
-let socket = null
-
-onMounted(() => {
-    socket = io(import.meta.env.VITE_BACKEND_URL)
-
-    socket.on('receiveMessage', (message) => {
-        messages.value.push({
-            _id: message.id,
-            content: message.text,
-            senderId: message.sendby,
-            timestamp: new Date().toISOString(),
-        })
-    })
-})
-
-onUnmounted(() => {
-    socket.disconnect()
-})
-
-function sendMessage({ message }) {
-    if (!message.content.trim()) return
-    socket.emit('sendMessage', {
-        chatroomId: chatroomId.value,
-        sendby: user.username,
-        text: message.content,
-    })
-}
-
-watch(
-    () => route.params.id,
-    (newId) => {
-        chatroomId.value = newId
-        rooms.value = [{ roomId: newId, roomName: `聊天室 ${newId}` }]
+export default {
+    data() {
+        return {
+            currentUserId: '1234',
+            rooms: [
+                {
+                    roomId: '1',
+                    roomName: 'Room 1',
+                    avatar: 'https://66.media.tumblr.com/avatar_c6a8eae4303e_512.pnj',
+                    users: [
+                        { _id: '1234', username: 'John Doe' },
+                        { _id: '4321', username: 'John Snow' },
+                    ],
+                },
+                {
+                    roomId: '2',
+                    roomName: 'Room 1',
+                    avatar: 'https://66.media.tumblr.com/avatar_c6a8eae4303e_512.pnj',
+                    users: [
+                        { _id: '1234', username: 'John Doe' },
+                        { _id: '4321', username: 'John Snow' },
+                    ],
+                },
+            ],
+            messages: [],
+            messagesLoaded: false,
+        }
     },
-)
+
+    methods: {
+        fetchMessages({ options = {} }) {
+            setTimeout(() => {
+                if (options.reset) {
+                    this.messages = this.addMessages(true)
+                } else {
+                    this.messages = [...this.addMessages(), ...this.messages]
+                    this.messagesLoaded = true
+                }
+                // this.addNewMessage()
+            })
+        },
+
+        addMessages(reset) {
+            const messages = []
+
+            for (let i = 0; i < 30; i++) {
+                messages.push({
+                    _id: reset ? i : this.messages.length + i,
+                    content: `${reset ? '' : 'paginated'} message ${i + 1}`,
+                    senderId: '4321',
+                    username: 'John Doe',
+                    date: '13 November',
+                    timestamp: '10:20',
+                })
+            }
+
+            return messages
+        },
+
+        sendMessage(message) {
+            this.messages = [
+                ...this.messages,
+                {
+                    _id: this.messages.length,
+                    content: message.content,
+                    senderId: this.currentUserId,
+                    timestamp: new Date().toString().substring(16, 21),
+                    date: new Date().toDateString(),
+                },
+            ]
+        },
+
+        addNewMessage() {
+            setTimeout(() => {
+                this.messages = [
+                    ...this.messages,
+                    {
+                        _id: this.messages.length,
+                        content: 'NEW MESSAGE',
+                        senderId: '1234',
+                        timestamp: new Date().toString().substring(16, 21),
+                        date: new Date().toDateString(),
+                    },
+                ]
+            }, 2000)
+        },
+    },
+}
 </script>
 
-<route lang="json">
-{
-    "meta": {
-        "layout": "chatroom",
-        "title": "聊天室",
-        "login": true
-    }
+<style lang="scss">
+body {
+    font-family: 'Quicksand', sans-serif;
 }
-</route>
+</style>

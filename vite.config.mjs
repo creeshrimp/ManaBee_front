@@ -17,7 +17,14 @@ export default defineConfig({
     VueRouter(),
     Layouts(),
     Vue({
-      template: { transformAssetUrls },
+      template: {
+        transformAssetUrls,
+        compilerOptions: {
+          isCustomElement: (tagName) => {
+            return tagName === 'vue-advanced-chat' || tagName === 'emoji-picker'
+          },
+        },
+      },
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
