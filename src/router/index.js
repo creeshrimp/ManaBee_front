@@ -5,13 +5,43 @@
  */
 
 // Composables
-import { createRouter, createWebHashHistory } from 'vue-router/auto'
+import { createRouter, createWebHashHistory, START_LOCATION } from 'vue-router/auto'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { routes } from 'vue-router/auto-routes'
+import { useAxios } from '@/composables/axios'
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
     routes: setupLayouts(routes),
+})
+
+// beforeEach
+// 每個頁面都要取得使用者資料，如果取不了代表沒登入
+router.beforeEach(async (to, from, next) => {
+    const { apiAuth } = useAxios()
+    const user = useUserStore()
+
+    if (from === START_LOCATION && user.isLoggedIn) {
+        try {
+            const { data } = await apiAuth.get('/user/profile')
+            user.login(data.result)
+        } catch (error) {
+            console.log(error)
+            user.logout()
+        }
+    }
+
+    // 重新導向
+    if (user.isLoggedIn && ['/login', '/register'].includes(to.path)) {
+        next('/')
+    } else if (to.meta.login && !user.isLoggedIn) {
+        next('/login')
+    } else if (to.meta.admin && !user.isAdmin) {
+        next('/')
+    } else {
+        next()
+    }
 })
 
 // afterEach

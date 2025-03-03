@@ -7,7 +7,7 @@
                         <v-img alt="John" src="https://cdn.vuetifyjs.com/images/john.jpg"></v-img>
                     </v-avatar>
                 </v-btn>
-                夏日殘雪
+                聊天室{{ chatroomId }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon="mdi-dots-vertical"></v-btn>
@@ -77,8 +77,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { io } from 'socket.io-client'
+import { useUserStore } from '@/stores/user'
+import { useRoute } from 'vue-router'
+
+// use
+const user = useUserStore()
+const route = useRoute()
 
 // 訊息陣列
 // const exampleMessages = ref([
@@ -133,10 +139,20 @@ function sendMessage() {
     socket.emit('sendMessage', {
         name: socket.id,
         text: inputMsg.value,
-        avatar: 'images/熊熊頭貼.jpg',
+        avatar: user.avatar,
     })
     inputMsg.value = ''
 }
+
+// 監聽聊天室 ID 變化，切換聊天室時重新載入訊息
+const chatroomId = ref(route.params.id)
+watch(
+    () => route.params.id,
+    (newId) => {
+        chatroomId.value = newId
+        //   loadMessages(newId)
+    },
+)
 </script>
 <route lang="json">
 {

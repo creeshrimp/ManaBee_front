@@ -2,11 +2,11 @@ import axios from 'axios'
 import { useUserStore } from '@/stores/user'
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API,
+    baseURL: import.meta.env.VITE_BACKEND_URL,
 })
 
 const apiAuth = axios.create({
-    baseURL: import.meta.env.VITE_API,
+    baseURL: import.meta.env.VITE_BACKEND_URL,
 })
 
 // ----------------------------------------------------------------

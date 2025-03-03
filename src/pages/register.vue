@@ -2,7 +2,7 @@
     <v-container>
         <v-row>
             <v-col cols="12">
-                <h1 class="text-center">登入</h1>
+                <h1 class="text-center">註冊</h1>
             </v-col>
             <v-divider></v-divider>
             <v-col cols="12">
@@ -24,6 +24,26 @@
                         maxlength="20"
                         counter
                     />
+                    <v-text-field
+                        v-model="passwordConfirm.value.value"
+                        type="password"
+                        :error-messages="passwordConfirm.errorMessage.value"
+                        label="密碼確認"
+                        minlength="4"
+                        maxlength="20"
+                        counter
+                    >
+                    </v-text-field>
+                    <!-- 性別 -->
+                    <v-select
+                        v-model="gender.value.value"
+                        :items="genderOptions"
+                        item-title="label"
+                        item-value="value"
+                        :error-messages="gender.errorMessage.value"
+                        label="性別"
+                        variant="outlined"
+                    ></v-select>
                     <div class="text-center">
                         <v-btn :loading="isSubmitting" type="submit" color="primary">送出</v-btn>
                     </div>
@@ -58,6 +78,15 @@ const schema = yup.object({
         .required('密碼必填')
         .min(4, '密碼過短')
         .max(20, '密碼過長'),
+    // prettier-ignore
+    passwordConfirm: yup
+    .string()
+    .oneOf([yup.ref('password')], '密碼不一致'),
+    // 性別
+    // prettier-ignore
+    gender: yup
+        .string()
+        .required('性別必填'),
 })
 
 // 建立表單
@@ -68,16 +97,19 @@ const { handleSubmit, isSubmitting } = useForm({
 // 建立欄位
 const username = useField('username')
 const password = useField('password')
+const passwordConfirm = useField('passwordConfirm')
+const gender = useField('gender')
 
 const submit = handleSubmit(async (values) => {
     try {
-        const { data } = await api.post('/user/login', {
+        const { data } = await api.post('/user', {
             username: values.username,
             password: values.password,
+            gender: values.gender,
         })
 
         user.login(data.result)
-        console.log('登入成功:', data.result)
+        console.log('註冊成功:', data.result)
         // createSnackbar({
         //     text: '登入成功',
         //     snackbarProps: {
@@ -85,8 +117,8 @@ const submit = handleSubmit(async (values) => {
         //     },
         // })
 
-        // 登入成功回首頁
-        router.push('/')
+        // 註冊成功導向登入
+        router.push('/login')
     } catch (error) {
         console.log(error)
         // createSnackbar({
@@ -97,4 +129,10 @@ const submit = handleSubmit(async (values) => {
         // })
     }
 })
+
+// 變數
+const genderOptions = [
+    { label: '男', value: 'male' },
+    { label: '女', value: 'female' },
+]
 </script>
