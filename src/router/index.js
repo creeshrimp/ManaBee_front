@@ -16,6 +16,8 @@ const router = createRouter({
     routes: setupLayouts(routes),
 })
 
+console.log(routes)
+
 // beforeEach
 // 每個頁面都要取得使用者資料，如果取不了代表沒登入
 router.beforeEach(async (to, from, next) => {

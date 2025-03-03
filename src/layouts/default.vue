@@ -8,7 +8,7 @@
         </v-toolbar-title>
 
         <template v-if="$vuetify.display.mdAndUp">
-            <v-btn prepend-icon="mdi-message-text" variant="text" to="/chatroom/chat">聊天室</v-btn>
+            <v-btn prepend-icon="mdi-message-text" variant="text" to="/chatroom">聊天室</v-btn>
         </template>
         <v-spacer />
 
