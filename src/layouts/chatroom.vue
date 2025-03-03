@@ -1,6 +1,5 @@
 <template>
-    <v-navigation-drawer v-model="drawer1">
-        <!-- 回首頁 -->
+    <!-- <v-navigation-drawer v-model="drawer1">
         <v-list-item lines="two" prepend-icon="mdi-home-city" title="回首頁" to="/"></v-list-item>
         <v-divider />
         <v-list-item
@@ -21,11 +20,78 @@
                 <v-list-item-title> {{ user.username }} </v-list-item-title>
             </v-list-item>
         </template>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
+    <!-- 導覽列 -->
+    <div id="chat-wrapper">
+        <v-app-bar id="appbar" color="primary" :rounded="0" :tile="false" density="compact" scroll-behavior="hide">
+            <template #prepend>
+                <v-app-bar-nav-icon
+                    v-if="$vuetify.display.smAndDown"
+                    class="mr-n2"
+                    variant="text"
+                    @click.stop="drawer = !drawer"
+                />
+                <v-app-bar-title class="ml-2">
+                    <v-icon>mdi-bee</v-icon>
+                    <span>MANABEE</span>
+                </v-app-bar-title>
+            </template>
+            <v-spacer />
+            <template v-if="$vuetify.display.mdAndUp">
+                <v-btn prepend-icon="mdi-message-text" variant="plain" to="/chatroom" rounded="0" class="h-100">聊天室</v-btn>
+            </template>
 
-    <v-main>
-        <router-view></router-view>
-    </v-main>
+            <!-- 登入/註冊 -->
+            <template v-if="!user.isLoggedIn">
+                <v-btn variant="flat" color="success" to="/login">登入</v-btn>
+                <v-btn variant="outlined" color="white" class="ml-2" to="/register">註冊</v-btn>
+            </template>
+            <!-- 登出 -->
+            <!-- <template v-else>
+                <v-btn variant="flat" color="success" rounded="0" class="h-100" @click="logout">登出</v-btn>
+            </template> -->
+            <!-- user 頭像，點擊出現v-menu，包含登出、個人資料等 -->
+            <v-menu>
+                <template #activator="{ props }">
+                    <v-btn icon="mdi-account" variant="text" v-bind="props"></v-btn>
+                </template>
+                <v-list>
+                    <v-list-item prepend-icon="mdi-account" title="個人資料" to="/profile"></v-list-item>
+                    <v-list-item prepend-icon="mdi-logout" title="登出" @click="logout"></v-list-item>
+                </v-list>
+            </v-menu>
+        </v-app-bar>
+
+        <!-- 手機側邊攔 -->
+        <v-navigation-drawer v-model="drawer" location="start" mobile temporary>
+            <template #prepend>
+                <v-list-item lines="two" :prepend-avatar="user.avatar" :title="user.username" />
+            </template>
+
+            <v-divider />
+
+            <v-list density="compact" nav>
+                <v-list-item prepend-icon="mdi-home-city" title="首頁" to="/" />
+                <v-list-item prepend-icon="mdi-message-text" title="聊天室" to="/chatroom/chat" />
+            </v-list>
+        </v-navigation-drawer>
+
+        <v-main id="main">
+            <router-view></router-view>
+        </v-main>
+    </div>
+
+    <!-- fab -->
+    <v-fab
+        :absolute="false"
+        :app="true"
+        color="primary"
+        :location="'right bottom'"
+        size="large"
+        icon="mdi-calendar-plus"
+        variant="flat"
+        to="/chatroom"
+    ></v-fab>
 </template>
 
 <script setup>
@@ -33,25 +99,26 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 const user = useUserStore()
 // 側邊欄1
-const drawer1 = ref(null)
+const drawer = ref(null)
 // 對話列表
-const chatlist = ref([
-    {
-        _id: 1,
-        avatar: 'https://randomuser.me/api/portraits/men/15.jpg',
-        partner: '夏日殘雪',
-    },
-    {
-        _id: 2,
-        avatar: 'https://randomuser.me/api/portraits/men/16.jpg',
-        partner: '冬日暖陽',
-    },
-    {
-        _id: 3,
-        avatar: 'https://randomuser.me/api/portraits/women/17.jpg',
-        partner: '王小美',
-    },
-])
 
 // 側邊欄2
 </script>
+
+<style>
+#chat-wrapper {
+    height: 100dvh;
+    display: flex;
+    flex-flow: column;
+
+    #appbar {
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+
+    #main {
+        height: 100%;
+        flex-shrink: 1;
+    }
+}
+</style>

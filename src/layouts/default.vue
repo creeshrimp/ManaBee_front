@@ -1,16 +1,17 @@
 <template>
     <!-- 導覽列 -->
     <v-app-bar color="primary" :height="60" :rounded="0" :tile="false" density="default" scroll-behavior="hide">
-        <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" variant="text" @click.stop="drawer = !drawer" />
-        <v-toolbar-title>
-            <v-icon>mdi-bee</v-icon>
-            <span>MANABEE</span>
-        </v-toolbar-title>
-
-        <template v-if="$vuetify.display.mdAndUp">
-            <v-btn prepend-icon="mdi-message-text" variant="text" to="/chatroom">聊天室</v-btn>
+        <template #prepend>
+            <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" variant="text" @click.stop="drawer = !drawer" />
+            <v-app-bar-title>
+                <v-icon>mdi-bee</v-icon>
+                <span>MANABEE</span>
+            </v-app-bar-title>
         </template>
         <v-spacer />
+        <template v-if="$vuetify.display.mdAndUp">
+            <v-btn prepend-icon="mdi-message-text" variant="plain" to="/chatroom" rounded="0" class="h-100">聊天室</v-btn>
+        </template>
 
         <!-- 登入/註冊 -->
         <template v-if="!user.isLoggedIn">
@@ -18,9 +19,9 @@
             <v-btn variant="outlined" color="white" class="ml-2" to="/register">註冊</v-btn>
         </template>
         <!-- 登出 -->
-        <template v-else>
-            <v-btn variant="flat" color="success" @click="logout">登出</v-btn>
-        </template>
+        <!-- <template v-else>
+            <v-btn variant="flat" color="success" rounded="0" class="h-100" @click="logout">登出</v-btn>
+        </template> -->
         <v-btn icon="mdi-dots-vertical" variant="text" />
     </v-app-bar>
 
@@ -82,4 +83,7 @@ async function logout() {
 
 // 側邊欄1
 const drawer = ref(false)
+
+// show
+const chatLinkShow = ref(false)
 </script>
