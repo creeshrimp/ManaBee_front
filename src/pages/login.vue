@@ -1,33 +1,40 @@
 <template>
     <v-container>
-        <v-row>
+        <v-row class="d-flex justify-center align-center">
             <v-col cols="12">
-                <h1 class="text-center">登入</h1>
+                <h1 class="text-center text-secondary opacity-80">登入 MANABEE</h1>
             </v-col>
-            <v-divider></v-divider>
-            <v-col cols="12">
-                <v-form :disabled="isSubmitting" @submit.prevent="submit">
-                    <v-text-field
-                        v-model="username.value.value"
-                        :error-messages="username.errorMessage.value"
-                        :label="'帳號'"
-                        minlength="4"
-                        maxlength="20"
-                        counter
-                    />
-                    <v-text-field
-                        v-model="password.value.value"
-                        type="password"
-                        :error-messages="password.errorMessage.value"
-                        :label="'密碼'"
-                        minlength="4"
-                        maxlength="20"
-                        counter
-                    />
-                    <div class="text-center">
-                        <v-btn :loading="isSubmitting" type="submit" color="primary">送出</v-btn>
-                    </div>
-                </v-form>
+            <v-col cols="12" md="8">
+                <v-card flat>
+                    <v-card-text>
+                        <v-form :disabled="isSubmitting" @submit.prevent="submit">
+                            <v-text-field
+                                v-model="username.value.value"
+                                variant="outlined"
+                                :error-messages="username.errorMessage.value"
+                                :label="'帳號'"
+                                minlength="4"
+                                maxlength="20"
+                                counter
+                            />
+                            <v-text-field
+                                v-model="password.value.value"
+                                variant="outlined"
+                                type="password"
+                                :error-messages="password.errorMessage.value"
+                                :label="'密碼'"
+                                minlength="4"
+                                maxlength="20"
+                                counter
+                            />
+                            <div class="text-center">
+                                <v-btn :loading="isSubmitting" type="submit" color="secondary" flat block size="large"
+                                    >登入</v-btn
+                                >
+                            </div>
+                        </v-form>
+                    </v-card-text>
+                </v-card>
             </v-col>
         </v-row>
     </v-container>

@@ -13,11 +13,19 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [
     VueRouter(),
     Layouts(),
     Vue({
-      template: { transformAssetUrls },
+      template: {
+        transformAssetUrls,
+        compilerOptions: {
+          isCustomElement: (tagName) => {
+            return tagName === 'vue-advanced-chat' || tagName === 'emoji-picker'
+          },
+        },
+      },
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({

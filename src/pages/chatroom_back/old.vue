@@ -123,6 +123,8 @@ const messages = ref([])
 const inputMsg = ref('')
 let socket = null
 
+const chatroomId = ref(route.params.id)
+
 onMounted(() => {
     socket = io(import.meta.env.VITE_BACKEND_URL) // 只有進入聊天室時才連線
 
@@ -137,15 +139,16 @@ onUnmounted(() => {
 function sendMessage() {
     if (inputMsg.value === '') return
     socket.emit('sendMessage', {
-        name: socket.id,
+        chatroomId: chatroomId.value,
+        sendby: user.username,
         text: inputMsg.value,
-        avatar: user.avatar,
+        // avatar: user.avatar,
     })
     inputMsg.value = ''
 }
 
 // 監聽聊天室 ID 變化，切換聊天室時重新載入訊息
-const chatroomId = ref(route.params.id)
+
 watch(
     () => route.params.id,
     (newId) => {
@@ -158,7 +161,8 @@ watch(
 {
     "meta": {
         "layout": "chatroom",
-        "title": "聊天室"
+        "title": "聊天室",
+        "login": true
     }
 }
 </route>
