@@ -45,7 +45,7 @@
 
         <v-list density="compact" nav>
             <v-list-item prepend-icon="mdi-home-city" title="首頁" to="/" />
-            <v-list-item prepend-icon="mdi-message-text" title="聊天室" to="/chatroom/chat" />
+            <v-list-item prepend-icon="mdi-message-text" title="聊天室" to="/chatroom" />
         </v-list>
     </v-navigation-drawer>
 
