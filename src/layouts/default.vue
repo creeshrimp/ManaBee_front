@@ -49,7 +49,7 @@
         </v-list>
     </v-navigation-drawer>
 
-    <v-main>
+    <v-main class="bg-bee">
         <router-view></router-view>
     </v-main>
 
@@ -64,7 +64,10 @@
         variant="flat"
     ></v-fab> -->
 
-    <v-footer color="secondary-lighten-1" :app="false" class="d-flex justify-center"> Copyright © 2025 MANABEE </v-footer>
+    <v-footer color="secondary-lighten-1" :app="false" class="d-flex justify-center">
+        Copyright © 2025 MANABEE
+        <v-img class="" max-width="80" cover src="/public/images/IMG_5218.png"></v-img>
+    </v-footer>
 </template>
 
 <script setup>
@@ -96,3 +99,13 @@ const drawer = ref(false)
 // show
 const chatLinkShow = ref(false)
 </script>
+
+<style>
+.bg-bee {
+    background: url(/public/images/BeeLogo.png);
+    background-repeat: no-repeat;
+    background-position: bottom -10% right -5%;
+    /* backdrop-filter: blur(20%); */
+    padding-bottom: 160px !important;
+}
+</style>

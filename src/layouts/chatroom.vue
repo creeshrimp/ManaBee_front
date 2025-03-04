@@ -83,12 +83,30 @@
 <script setup>
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+import { useAxios } from '@/composables/axios'
 const user = useUserStore()
+const { apiAuth } = useAxios()
+const router = useRouter()
+
 // 側邊欄1
 const drawer = ref(null)
 // 對話列表
 
 // 側邊欄2
+
+// 登出
+async function logout() {
+    try {
+        await apiAuth.delete('/user/logout')
+    } catch (error) {
+        console.log(error)
+    }
+
+    user.logout()
+    alert('登出成功')
+    router.push('/')
+}
 </script>
 
 <style>
