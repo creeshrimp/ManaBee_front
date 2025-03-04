@@ -95,14 +95,11 @@ async function logout() {
 
 // 側邊欄1
 const drawer = ref(false)
-
-// show
-const chatLinkShow = ref(false)
 </script>
 
 <style>
 .bg-bee {
-    background: url(/images/BeeLogo.png);
+    background: url(/images/bee1.png);
     background-repeat: no-repeat;
     background-position: bottom -10% right -5%;
     /* backdrop-filter: blur(20%); */

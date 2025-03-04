@@ -44,6 +44,14 @@
                         label="性別"
                         variant="outlined"
                     ></v-select>
+                    <!-- 暱稱 -->
+                    <v-text-field
+                        v-model="nickname.value.value"
+                        :error-messages="nickname.errorMessage.value"
+                        label="暱稱"
+                        maxlength="10"
+                    >
+                    </v-text-field>
                     <div class="text-center">
                         <v-btn :loading="isSubmitting" type="submit" color="primary">送出</v-btn>
                     </div>
@@ -82,6 +90,13 @@ const schema = yup.object({
     passwordConfirm: yup
     .string()
     .oneOf([yup.ref('password')], '密碼不一致'),
+
+    // 暱稱
+    // prettier-ignore
+    nickname: yup
+        .string()
+        .max(10, '暱稱過長'),
+
     // 性別
     // prettier-ignore
     gender: yup
@@ -99,12 +114,14 @@ const username = useField('username')
 const password = useField('password')
 const passwordConfirm = useField('passwordConfirm')
 const gender = useField('gender')
+const nickname = useField('nickname')
 
 const submit = handleSubmit(async (values) => {
     try {
         const { data } = await api.post('/user', {
             username: values.username,
             password: values.password,
+            nickname: values.nickname,
             gender: values.gender,
         })
 
@@ -134,5 +151,6 @@ const submit = handleSubmit(async (values) => {
 const genderOptions = [
     { label: '男', value: 'male' },
     { label: '女', value: 'female' },
+    { label: '我是一隻蜜蜂', value: false },
 ]
 </script>

@@ -3,6 +3,7 @@
     <v-container>
         <v-toolbar dense floating class="pa-1" color="transparent">
             <v-text-field
+                v-model="keyword"
                 :loading="loading"
                 append-inner-icon="mdi-magnify"
                 label="尋找志同道合的夥伴"
@@ -11,22 +12,21 @@
                 single-line
                 color="secondary"
                 @click:append-inner="search"
-                v-model="keyword"
             ></v-text-field>
         </v-toolbar>
     </v-container>
 
     <v-container>
         <v-row>
-            <v-col v-for="profile in profiles" :key="profile.userId" cols="12" sm="6" md="5" lg="4">
+            <v-col v-for="profile in profiles" :key="profile.userId" cols="12" sm="6" lg="4">
                 <div class="honeycomb">
                     <v-card elevation="0" color="surface" variant="flat" align="center">
                         <v-card-title class="">
                             <v-avatar>
                                 <!-- 若有 avatar 可自行替換 -->
-                                <v-img :src="profile.avatar || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'" cover></v-img>
+                                <v-img :src="profile.avatar || '/images/熊熊頭貼.jpg'" cover></v-img>
                             </v-avatar>
-                            <div class="ml-1 mt-2">{{ profile.username }}</div>
+                            <div class="mt-2">{{ profile.nickname || profile.username }}</div>
                         </v-card-title>
 
                         <v-card-text class="text-center">
@@ -83,7 +83,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
 import { useAxios } from '@/composables/axios'
 const { api } = useAxios()
 
@@ -94,7 +93,6 @@ const keyword = ref('')
 async function fetchProfiles() {
     loading.value = true
     try {
-        // 假設 API 路徑為 /api/user/profiles，依需求調整
         const res = await api.get('/user/profiles')
         if (res.data.success) {
             console.log(res.data.result)

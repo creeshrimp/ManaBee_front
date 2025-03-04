@@ -7,6 +7,7 @@ export const useUserStore = defineStore(
     () => {
         const token = ref('')
         const username = ref('')
+        const nickname = ref('')
         const userId = ref('')
         const gender = ref('')
         // 新增欄位
@@ -19,6 +20,10 @@ export const useUserStore = defineStore(
 
         // 大頭貼 (利用 API 根據帳號名產生固定的大頭貼)
         const avatar = computed(() => {
+            // 如果false或是不存在，給他一隻蜜蜂
+            if (!gender.value) return '/images/bee1.png'
+
+            // gender字串轉換成對應的圖片網址
             const g = gender.value === 'male' ? 'men' : 'women'
             const n = Math.floor(Math.random() * 100)
             return `https://randomuser.me/api/portraits/${g}/${n}.jpg`
@@ -33,6 +38,7 @@ export const useUserStore = defineStore(
                 token.value = user.token
             }
             username.value = user.username
+            nickname.value = user.nickname
             userId.value = user.userId
             gender.value = user.gender
 
@@ -48,6 +54,7 @@ export const useUserStore = defineStore(
         const logout = () => {
             token.value = ''
             username.value = ''
+            nickname.value = ''
             userId.value = ''
             gender.value = ''
             learningSkills.value = []
@@ -55,19 +62,8 @@ export const useUserStore = defineStore(
             introduction.value = ''
         }
 
-        return {
-            token,
-            username,
-            userId,
-            gender,
-            isLoggedIn,
-            login,
-            logout,
-            avatar,
-            learningSkills,
-            teachingSkills,
-            introduction,
-        }
+        // prettier-ignore
+        return { token, username, userId, gender, isLoggedIn, login, logout, avatar, learningSkills, teachingSkills, introduction,}
     },
     {
         persist: {

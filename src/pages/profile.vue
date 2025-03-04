@@ -3,8 +3,8 @@
         <h1>編輯個人資料</h1>
         <v-card>
             <v-card-text>
-                <!-- 使用者名稱 -->
-                <v-text-field v-model="form.username" label="使用者名稱" outlined></v-text-field>
+                <!-- 暱稱 -->
+                <v-text-field v-model="form.nickname" label="暱稱" outlined></v-text-field>
 
                 <!-- 自我介紹 -->
                 <v-textarea v-model="form.introduction" label="自我介紹" outlined></v-textarea>
@@ -29,18 +29,18 @@
 <script setup>
 import { useAxios } from '@/composables/axios'
 import { reactive } from 'vue'
-import axios from 'axios'
 import { useUserStore } from '@/stores/user'
 
 const { apiAuth } = useAxios()
 const userStore = useUserStore()
 
 const form = reactive({
-    username: userStore.username,
+    nickname: userStore.nickname,
     introduction: userStore.introduction,
     // 假設原本學習與教學技能格式為陣列，如：[{ name: '工程', descriptions: 'xxx' }, ...]
-    learningSkills: [...userStore.learningSkills],
-    teachingSkills: [...userStore.teachingSkills],
+    // {name:xxx, descriptions:xxx, _id:xxx}只取name欄位
+    learningSkills: [...userStore.learningSkills.map((skillObj) => skillObj.name)],
+    teachingSkills: [...userStore.teachingSkills.map((skillObj) => skillObj.name)],
 })
 
 async function handleUpload() {
@@ -53,7 +53,7 @@ async function handleUpload() {
 
         if (res.data.success) {
             // 更新成功後，同步更新 Pinia store（可根據需求調整）
-            userStore.username = res.data.result.username
+            userStore.nickname = res.data.result.nickname
             userStore.introduction = res.data.result.introduction
             userStore.learningSkills = res.data.result.learningSkills
             userStore.teachingSkills = res.data.result.teachingSkills
