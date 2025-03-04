@@ -30,9 +30,9 @@
         <template v-else>
             <!-- 給沒登入的看的 -->
             <v-btn variant="flat" color="success" to="/login">登入</v-btn>
-            <v-btn variant="outlined" color="" class="ml-2" to="/register">註冊</v-btn>
+            <v-btn variant="outlined" color="" class="ml-2 mr-4" to="/register">註冊</v-btn>
         </template>
-        <v-btn icon="mdi-dots-vertical" variant="text" />
+        <!-- <v-btn icon="mdi-dots-vertical" variant="text" /> -->
     </v-app-bar>
 
     <!-- 手機側邊攔 -->

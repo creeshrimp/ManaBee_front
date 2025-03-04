@@ -37,8 +37,10 @@ export const useUserStore = defineStore(
             if (user.token) {
                 token.value = user.token
             }
+            console.log('store user login:', user)
             username.value = user.username
             nickname.value = user.nickname
+            console.log('nickname.value:', nickname.value)
             userId.value = user.userId
             gender.value = user.gender
 
@@ -63,7 +65,7 @@ export const useUserStore = defineStore(
         }
 
         // prettier-ignore
-        return { token, username, userId, gender, isLoggedIn, login, logout, avatar, learningSkills, teachingSkills, introduction,}
+        return { token, username,nickname, userId, gender, isLoggedIn, login, logout, avatar, learningSkills, teachingSkills, introduction,}
     },
     {
         persist: {
