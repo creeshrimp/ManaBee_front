@@ -55,7 +55,7 @@
         variant="flat"
     ></v-fab> -->
 
-    <v-footer color="secondary" :app="true" class="d-flex justify-center"> Copyright © 2025 MANABEE </v-footer>
+    <v-footer color="secondary" :app="false" class="d-flex justify-center"> Copyright © 2025 MANABEE </v-footer>
 </template>
 
 <script setup>
