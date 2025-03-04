@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer v-model="drawer1">
+    <!-- <v-navigation-drawer v-model="drawer1">
         <v-list-item lines="two" prepend-icon="mdi-home-city" title="回首頁" to="/"></v-list-item>
         <v-divider />
         <v-list-item
@@ -20,7 +20,7 @@
                 <v-list-item-title> {{ user.username }} </v-list-item-title>
             </v-list-item>
         </template>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
     <!-- 導覽列 -->
     <div id="chat-wrapper">
         <v-app-bar id="appbar" color="primary" :rounded="0" :tile="false" density="compact" scroll-behavior="hide" elevation="0">
@@ -42,11 +42,7 @@
             </template> -->
 
             <!-- 登入/註冊 -->
-            <template v-if="!user.isLoggedIn">
-                <v-btn variant="flat" color="success" to="/login">登入</v-btn>
-                <v-btn variant="outlined" color="white" class="ml-2" to="/register">註冊</v-btn>
-            </template>
-            <template v-else>
+            <template v-if="user.isLoggedIn">
                 <!-- user 頭像，點擊出現v-menu，包含登出、個人資料等 -->
                 <v-menu>
                     <template #activator="{ props }">
@@ -57,6 +53,10 @@
                         <v-list-item prepend-icon="mdi-logout" title="登出" @click="logout"></v-list-item>
                     </v-list>
                 </v-menu>
+            </template>
+            <template v-else>
+                <v-btn variant="flat" color="success" to="/login">登入</v-btn>
+                <v-btn variant="outlined" color="white" class="ml-2" to="/register">註冊</v-btn>
             </template>
         </v-app-bar>
 

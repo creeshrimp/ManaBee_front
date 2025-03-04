@@ -10,19 +10,28 @@
         </template>
 
         <v-spacer />
-        <template v-if="$vuetify.display.mdAndUp">
-            <v-btn prepend-icon="mdi-message-text" variant="plain" to="/chatroom" rounded="0" class="h-100">聊天室</v-btn>
-        </template>
 
         <!-- 登入/註冊 -->
-        <template v-if="!user.isLoggedIn">
-            <v-btn variant="flat" color="success" to="/login">登入</v-btn>
-            <v-btn variant="outlined" color="white" class="ml-2" to="/register">註冊</v-btn>
+        <template v-if="user.isLoggedIn">
+            <template v-if="$vuetify.display.mdAndUp">
+                <v-btn prepend-icon="mdi-message-text" variant="plain" to="/chatroom" rounded="0" class="h-100">聊天室</v-btn>
+            </template>
+            <!-- 有登入能看的 -->
+            <v-menu>
+                <template #activator="{ props }">
+                    <v-btn icon="mdi-account" variant="text" v-bind="props"></v-btn>
+                </template>
+                <v-list>
+                    <v-list-item prepend-icon="mdi-account" title="個人資料" to="/profile"></v-list-item>
+                    <v-list-item prepend-icon="mdi-logout" title="登出" @click="logout"></v-list-item>
+                </v-list>
+            </v-menu>
         </template>
-        <!-- 登出 -->
-        <!-- <template v-else>
-            <v-btn variant="flat" color="success" rounded="0" class="h-100" @click="logout">登出</v-btn>
-        </template> -->
+        <template v-else>
+            <!-- 給沒登入的看的 -->
+            <v-btn variant="flat" color="success" to="/login">登入</v-btn>
+            <v-btn variant="outlined" color="" class="ml-2" to="/register">註冊</v-btn>
+        </template>
         <v-btn icon="mdi-dots-vertical" variant="text" />
     </v-app-bar>
 

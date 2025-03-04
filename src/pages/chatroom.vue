@@ -4,6 +4,7 @@
             height="100%"
             :current-user-id="currentUserId"
             :rooms="JSON.stringify(rooms)"
+            :load-first-room="false"
             :rooms-loaded="true"
             :messages="JSON.stringify(messages)"
             :messages-loaded="messagesLoaded"
@@ -58,14 +59,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { register } from 'vue-advanced-chat'
+import { io } from 'socket.io-client'
+import { useUserStore } from '@/stores/user'
+
+// 註冊 vue-advanced-chat
 register()
+
+const user = useUserStore()
 
 // 側邊欄
 const detailDrawer = ref(false)
 
-const currentUserId = ref('1234')
+const currentUserId = ref(user.userId)
+console.log('currentUserId:', currentUserId.value)
+
 const rooms = ref([
     {
         roomId: '1',
@@ -78,7 +87,7 @@ const rooms = ref([
     },
     {
         roomId: '2',
-        roomName: 'Room 1',
+        roomName: 'Room 2',
         avatar: 'https://66.media.tumblr.com/avatar_c6a8eae4303e_512.pnj',
         users: [
             { _id: '1234', username: 'John Doe' },
@@ -86,49 +95,127 @@ const rooms = ref([
         ],
     },
 ])
+
+// vue adv chat變數
 const messages = ref([])
 const messagesLoaded = ref(false)
+let currentRoomId = ref('1')
+
+// socket
+let socket = null
+socket = io(import.meta.env.VITE_BACKEND_URL) // 只有進入聊天室時才連線
+socket.on('receiveMessage', (message) => {
+    console.log('message.roomId:', message.roomId)
+    console.log('currentRoomId:', currentRoomId.value)
+    if (message.roomId !== currentRoomId.value) return
+    messages.value.push(message)
+})
 
 function fetchMessages(options = {}) {
-    setTimeout(() => {
-        if (options.reset) {
-            messages.value = addMessages(true)
-        } else {
-            messages.value = [...addMessages(), ...messages.value]
-            messagesLoaded.value = true
-        }
-        // addNewMessage()
-    })
+    console.log('options:', options)
+
+    // 加入特定聊天室
+    // socket.emit('joinRoom', roomid字串)
+    console.log('fetchMessages:socket: ', socket)
+
+    // 切換currentRoomId
+    currentRoomId.value = options.room.roomId
+    // 加入當前房間
+    socket.emit('joinRoom', options.room.roomId)
+
+    // ajax 載入就訊息
+    messages.value.splice(0)
+    if (options.reset) {
+        messages.value = addMessages(true, options.room.roomId)
+    } else {
+        messages.value = [...addMessages(false, options.room.roomId), ...messages.value]
+        messagesLoaded.value = true
+    }
+    // addNewMessage()
 }
 
-function addMessages(reset) {
-    const newMessages = []
+const fakeRoomsMsgs = [
+    {
+        roomId: '1',
+        messages: [
+            {
+                _id: 0,
+                content: `room1 的開頭 ${0}`,
+                senderId: '4321',
+                username: 'John Doe',
+                date: '13 November',
+                timestamp: '10:20',
+            },
+        ],
+    },
+    {
+        roomId: '2',
+        messages: [
+            {
+                _id: 0,
+                content: `room2 的開頭 ${0}`,
+                senderId: '4321',
+                username: 'John Doe',
+                date: '13 November',
+                timestamp: '10:20',
+            },
+        ],
+    },
+]
 
-    for (let i = 0; i < 30; i++) {
-        newMessages.push({
-            _id: reset ? i : messages.value.length + i,
-            content: `${reset ? '' : 'paginated'} message ${i + 1}`,
-            senderId: '4321',
-            username: 'John Doe',
-            date: '13 November',
-            timestamp: '10:20',
-        })
-    }
+function addMessages(reset, roomId) {
+    const newMessages = []
+    newMessages.push(...fakeRoomsMsgs.find((room) => room.roomId === roomId).messages)
+    // newMessages.push({
+    //     _id: 0,
+    //     content: `room ${roomId} 的開頭 ${0}`,
+    //     senderId: '4321',
+    //     username: 'John Doe',
+    //     date: '13 November',
+    //     timestamp: '10:20',
+    // })
+    // for (let i = 1; i < 31; i++) {
+    //     newMessages.push({
+    //         _id: reset ? i : messages.value.length + i,
+    //         content: `${reset ? '' : 'paginated'} message ${i}`,
+    //         senderId: '4321',
+    //         username: 'John Doe',
+    //         date: '13 November',
+    //         timestamp: '10:20',
+    //     })
+    // }
 
     return newMessages
 }
 
 function sendMessage(message) {
-    messages.value = [
-        ...messages.value,
-        {
-            _id: messages.value.length,
-            content: message.content,
-            senderId: currentUserId.value,
-            timestamp: new Date().toString().substring(16, 21),
-            date: new Date().toDateString(),
-        },
-    ]
+    console.log('message:', message)
+    console.log('message.value:', messages.value)
+
+    // 同步前端畫面，用不到了
+    // messages.value = [
+    //     ...messages.value,
+    //     {
+    //         _id: messages.value.length,
+    //         content: message.content,
+    //         senderId: currentUserId.value,
+    //         timestamp: new Date().toString().substring(16, 21),
+    //         date: new Date().toDateString(),
+    //     },
+    // ]
+
+    socket.emit('sendMessage', {
+        roomId: message.roomId,
+        // sendby: user.username,
+        // text: inputMsg.value,
+
+        _id: messages.value.length,
+        content: message.content,
+        senderId: currentUserId.value,
+        // timestamp: new Date().toString().substring(16, 21),
+        // date: new Date().toDateString(),
+    })
+    console.log(fakeRoomsMsgs)
 }
 
 function addNewMessage() {
@@ -146,14 +233,40 @@ function addNewMessage() {
     }, 2000)
 }
 
-onMounted(() => {
-    // Initial setup or fetching data if needed
+onMounted(() => {})
+// 組件銷毀時離該socket.io
+onUnmounted(() => {
+    socket.disconnect()
 })
 </script>
 
 <style lang="scss">
 body {
     font-family: 'Quicksand', sans-serif;
+}
+
+.vac-col-messages .vac-container-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #bbb #f0f0f0;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f0f0f0;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #bbb;
+        border-radius: 10px;
+
+        &:hover {
+            background: #999;
+        }
+    }
 }
 </style>
 <route lang="json">

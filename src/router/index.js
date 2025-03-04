@@ -26,6 +26,7 @@ router.beforeEach(async (to, from, next) => {
 
     if (from === START_LOCATION && user.isLoggedIn) {
         try {
+            console.log('beforeEach!!!!!!!!!!!!!!')
             const { data } = await apiAuth.get('/user/profile')
             user.login(data.result)
         } catch (error) {

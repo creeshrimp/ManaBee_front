@@ -9,6 +9,7 @@ export const useUserStore = defineStore(
     () => {
         const token = ref('')
         const username = ref('')
+        const userId = ref('')
         const gender = ref('')
         // const role = ref(UserRole.USER)
 
@@ -48,6 +49,7 @@ export const useUserStore = defineStore(
                 token.value = user.token
             }
             username.value = user.username
+            userId.value = user.userId
             gender.value = user.gender
 
             // [暫時先註解]
@@ -61,12 +63,14 @@ export const useUserStore = defineStore(
         const logout = () => {
             token.value = ''
             username.value = ''
+            userId.value = ''
+            gender.value = ''
 
             // [暫時先註解]
             // role.value = UserRole.USER
         }
 
-        return { token, username, gender, isLoggedIn, login, logout, avatar }
+        return { token, username, gender, isLoggedIn, login, logout, avatar, userId }
     },
     {
         persist: {
