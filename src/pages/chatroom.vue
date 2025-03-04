@@ -17,11 +17,12 @@
         v-if="!detailDrawer"
         :absolute="false"
         :app="true"
-        color="primary"
+        color="secondary"
         :location="'right top'"
         size="large"
-        icon="mdi-calendar-plus"
-        variant="flat"
+        icon="mdi-text"
+        variant="text"
+        class="mt-n2"
         @click="detailDrawer = true"
     ></v-fab>
 
@@ -30,25 +31,25 @@
         <template #prepend>
             <v-toolbar color="gray">
                 <v-btn icon="mdi-arrow-right" variant="text" @click="detailDrawer = false"></v-btn>
-                <span class="text-h5">細節設定</span>
+                <span class="text-h5">交換設定</span>
             </v-toolbar>
         </template>
 
         <!-- 表單:詳細資訊設定 -->
         <!-- <v-form :disabled="isSubmitting" @submit.prevent="submit"> -->
-        <v-card>
+        <v-card flat>
             <v-card-title> </v-card-title>
             <v-card-text>
                 <v-form>
-                    <v-text-field variant="solo" label="交換結束日期" />
-                    <v-text-field variant="solo" label="交換地點" />
+                    <v-text-field variant="outlined" label="交換頻率" flat />
+                    <v-text-field variant="outlined" label="交換結束日期" flat />
                 </v-form>
             </v-card-text>
         </v-card>
 
         <v-divider />
         <template #append>
-            <v-btn block color="success" flat size="large">開始交換</v-btn>
+            <v-btn block color="success" class="rounded-0" flat size="x-large">開始交換</v-btn>
         </template>
         <v-list density="compact" nav>
             <!-- <v-list-item prepend-icon="mdi-home-city" title="Home" value="home" /> -->
