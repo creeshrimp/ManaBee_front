@@ -4,7 +4,7 @@ name: Deploy
 on:
   push:
     # 依照分支名稱調整
-    branches: [main]
+    branches: [vue-advanced-chat-ver]
 # 執行的工作
 jobs:
   # 工作名稱
