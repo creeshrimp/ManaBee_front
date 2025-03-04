@@ -27,8 +27,8 @@ const manabeeLight = {
     // },
     colors: {
         background: '#ebebeb',
-        surface: '#fff5e6',
-        'surface-bright': 'ffffff',
+        surface: '#ffffff',
+        'surface-bright': '#ffffff',
         'surface-light': '#EEEEEE',
         'surface-variant': '#424242',
         'on-surface-variant': '#EEEEEE',

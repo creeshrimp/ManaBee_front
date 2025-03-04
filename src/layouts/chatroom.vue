@@ -37,9 +37,9 @@
                 </v-btn>
             </template>
             <v-spacer />
-            <template v-if="$vuetify.display.mdAndUp">
+            <!-- <template v-if="$vuetify.display.mdAndUp">
                 <v-btn prepend-icon="mdi-message-text" variant="plain" to="/chatroom" rounded="0" class="h-100">聊天室</v-btn>
-            </template>
+            </template> -->
 
             <!-- 登入/註冊 -->
             <template v-if="!user.isLoggedIn">

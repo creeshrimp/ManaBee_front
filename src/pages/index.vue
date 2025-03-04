@@ -17,7 +17,7 @@
     <v-container>
         <v-row>
             <v-col v-for="n in 6" :key="n" cols="12" sm="6" md="4">
-                <v-card elevation="0" class="rounded-lg" color="white " variant="flat">
+                <v-card elevation="0" class="rounded-lg" color="surface" variant="flat">
                     <div class="decoration-line bg-primary"></div>
                     <v-card-title class="d-flex align-center bg-primary-lighten-1">
                         <v-avatar>
