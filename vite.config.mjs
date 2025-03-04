@@ -13,7 +13,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/ManaBee_front/',
+  base: './',
   plugins: [
     VueRouter(),
     Layouts(),
