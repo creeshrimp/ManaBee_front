@@ -68,7 +68,8 @@
                                     variant="flat"
                                     color="primary-lighten-1"
                                     size="large"
-                                    :to="`/chatroom?userId=${profile._id}`"
+                                    :to="`/chatroom`"
+                                    @click="createChatroom(profile._id)"
                                 >
                                     聯絡他
                                 </v-btn>
@@ -84,7 +85,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAxios } from '@/composables/axios'
-const { api } = useAxios()
+const { api, apiAuth } = useAxios()
 
 const profiles = ref([])
 const loading = ref(false)
@@ -115,6 +116,15 @@ function search() {
 onMounted(() => {
     fetchProfiles()
 })
+
+async function createChatroom(partnerId) {
+    try {
+        await apiAuth.post(`/chatroom/${partnerId}`)
+        alert('聊天室建立成功')
+    } catch (error) {
+        console.log('createChatroom', error)
+    }
+}
 </script>
 
 <style scoped>

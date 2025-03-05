@@ -84,6 +84,17 @@ const rooms = ref([
             { _id: '1234', username: 'John Doe' },
             { _id: '4321', username: 'John Snow' },
         ],
+        lastMessage: {
+            _id: 'xyz',
+            content: 'Last message received',
+            senderId: '1234',
+            username: 'John Doe',
+            timestamp: '10:20',
+            saved: true,
+            distributed: false,
+            seen: false,
+            new: true,
+        },
     },
     {
         roomId: '2',
@@ -209,7 +220,8 @@ function sendMessage(message) {
         // sendby: user.username,
         // text: inputMsg.value,
 
-        _id: messages.value.length,
+        _id: Math.floor(Math.random() * 10) + 1,
+        // _id: messages.value.length,
         content: message.content,
         senderId: currentUserId.value,
         // timestamp: new Date().toString().substring(16, 21),
