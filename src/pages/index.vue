@@ -24,7 +24,7 @@
                         <v-card-title class="">
                             <v-avatar>
                                 <!-- 若有 avatar 可自行替換 -->
-                                <v-img :src="profile.avatar || '/images/熊熊頭貼.jpg'" cover></v-img>
+                                <v-img src="/images/kaifubear.jpg" cover></v-img>
                             </v-avatar>
                             <div class="mt-2">{{ profile.nickname || profile.username }}</div>
                         </v-card-title>
